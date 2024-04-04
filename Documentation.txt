@@ -1,0 +1,151 @@
+Online Learning Platform Backend Documentation
+
+Introduction:
+The Online Learning Platform Backend is a Django-based web application designed to manage courses and student enrollments for an online learning platform. This documentation provides an overview of the project structure, functionalities, API endpoints, request, and response formats, as well as usage instructions.
+
+Project Structure:
+The project consists of the following main components:
+
+    1.Models: Defines the structure of the database tables used to store course and enrollment information.
+    2.Serializers: Handles serialization and deserialization of data between Python objects and JSON format.
+    3.API Views: Implements RESTful API endpoints for performing CRUD operations on courses and enrollments.
+    4.URLs: Defines URL patterns to map API endpoints to corresponding views.
+
+
+Functionalities:
+
+    1.Course Management:
+        1.List Courses: Retrieve a list of courses with optional filtering by instructor, price, and duration.
+        2.Create Course: Add a new course with details such as title, description, instructor, duration, price, and currency.
+        3.Retrieve, Update, Delete Course: Access, modify, or remove a specific course by its ID.
+
+    2.Enrollment Management:
+        1.Create Enrollment: Enroll a student in a course by providing the student's name and the course ID.
+        2.List Enrollments: Retrieve a list of all enrollments.
+
+
+API Endpoints and Response Format:
+
+    1.List Courses:
+        1.Endpoint: GET /courses_list/
+        2.Response Format:
+            [
+                {
+                    "id": 1,
+                    "title": "Course Title",
+                    "description": "Course Description",
+                    "instructor": "Instructor Name",
+                    "duration": 120,
+                    "price": 99.99,
+                    "currency": "USD"
+                },
+                {
+                    "id": 2,
+                    "title": "Another Course",
+                    "description": "Another Description",
+                    "instructor": "Another Instructor",
+                    "duration": 90,
+                    "price": 79.99,
+                    "currency": "USD"
+            }
+    ]
+
+* Error (404 Not Found): If no courses are found.
+
+    2.Create Course:
+        1.Endpoint: POST /course_create/
+        2.Request Format:
+            {
+            "title": "New Course",
+            "description": "Description of the New Course",
+            "instructor": "New Instructor",
+            "duration": 60,
+            "price": 49.99,
+            "currency": "USD"
+        }
+
+    Response Format:
+        Success (201 Created):
+            {
+            "id": 3,
+            "title": "New Course",
+            "description": "Description of the New Course",
+            "instructor": "New Instructor",
+            "duration": 60,
+            "price": 49.99,
+            "currency": "USD"
+        }
+    
+    * Error (400 Bad Request): If the request is invalid.
+
+    3.Retrieve, Update, Delete Course:
+        1.Endpoint: GET /course/<int:pk>/, PUT /course/<int:pk>/, DELETE /course/<int:pk>/
+        2.Response Format: Similar to the Create Course response format.
+
+    4.Enroll Student:
+        1.Endpoint: POST /enrollments/
+        2.Request Format:
+            {
+            "student_name": "Student Name",
+            "course_name": 1
+        }
+
+        Response Format:
+            Success (201 Created):
+                {
+            "id": 1,
+            "student_name": "Student Name",
+            "course_name": "Course Title",
+            "enrollment_date": "2024-04-04"
+        }
+
+    * Error (400 Bad Request): If the request is invalid.
+
+    5.List Enrollments:
+        Endpoint: GET /enrollments_list/
+        Response Format: Similar to the List Courses response format.
+
+Usage Instructions:
+
+    1.API Endpoints:
+
+        1.Access the API endpoints by sending HTTP requests to the corresponding URLs as described above.
+        2.Handle responses based on the provided status codes and response formats.
+        3.Ensure to include required fields in requests and handle errors gracefully.
+
+    2.Error Handling:
+
+        1.Proper error messages and status codes are returned for invalid requests or server errors.
+        2.Handle errors gracefully on the client-side based on the received status codes and messages.
+
+
+
+
+Filtering by Instructor
+To filter courses by instructor, append ?instructor=<instructor_name> to the endpoint URL.
+
+Example:
+    GET /courses_list/?instructor=John Doe
+
+This will return all courses taught by an instructor whose name contains "John Doe".
+
+Filtering by Price
+To filter courses by price, append ?price=<price> to the endpoint URL.
+
+Example:
+    GET /courses_list/?price=50.0
+This will return all courses that have a price of 50.0.
+
+Filtering by Duration
+To filter courses by duration, append ?duration=<duration> to the endpoint URL.
+
+Example:
+    GET /courses_list/?duration=120
+This will return all courses that have a duration of 120 minutes.
+
+
+Combine these filters by appending multiple query parameters to the endpoint URL.
+For example:
+    GET /courses_list/?instructor=John Doe&price=50.0&duration=120
+This will return all courses taught by John Doe, with a price of 50.0, and a duration of 120 minutes.
+
